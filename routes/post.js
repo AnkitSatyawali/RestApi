@@ -1,5 +1,4 @@
 const express = require("express");
-const PostController = require("../controllers/post");
 const router = express.Router();
 const Post = require("../models/post");
 const multer = require('multer');
@@ -21,13 +20,13 @@ const fileFilter = (req,file,cb) => {
 };
 const upload = multer({storage:storage,fileFilter:fileFilter});
 
-router.post('/post',upload.single('image'),(req,res,next) =>{
+router.post('/post',(req,res,next) =>{
 	console.log(req.file);
 	const post = new Post({
 		title : req.body.title,
 		description : req.body.description,
 		username:req.body.username,
-		image: req.file.path
+		filetype: req.body.type
 	});
 	post.save().then(createdPost => {
 		res.status(200).json({
